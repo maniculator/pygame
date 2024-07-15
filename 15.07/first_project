@@ -1,0 +1,136 @@
+# coding: utf8
+import pygame
+
+# размер окна
+size = [400, 400]
+window = pygame.display.set_mode(size)
+
+# задайте имя
+pygame.display.set_caption("First file")
+
+screen = pygame.Surface(size)
+
+# создание объекта
+square = pygame.Surface([40, 40])
+square.fill([12, 244, 252])
+square1 = pygame.Surface([40, 40])
+square1.fill([255, 0, 61])
+square2 = pygame.Surface([40, 40])
+square2.fill([66, 178, 0])
+square3 = pygame.Surface([40, 40])
+square3.fill([252, 124, 12])
+# right_free = True
+# x = 0
+
+running = True
+rf = True
+h = True
+y = 0
+x = 0
+x1 = 360
+y1 = 360
+x2 =360
+y2 = 0
+x3 = 0
+y3 = 360
+while running:
+    # обработка событий
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            running = False
+
+    # задайте фоновый цвет
+    screen.fill([8, 57, 127])
+    # движение квадрата
+    if rf == True:
+        if x <= 180:
+            x += 1
+        else:
+            rf = False
+    if rf == False:
+        if x >= 0:
+            x -= 1
+        else:
+            rf = True
+    if h == True:
+        if y <= 180:
+            y += 1
+        else:
+            h = False
+    if h == False:
+        if y >= 0:
+            y -= 1
+        else:
+            h = True
+    if rf == False:
+        if x1 <= 360:
+            x1 += 1
+        else:
+            rf = True
+    if rf == True:
+        if x1 >= 180:
+            x1 -= 1
+        else:
+            rf = False
+    if h == False:
+        if y1 <= 360:
+            y1 += 1
+        else:
+            h = True
+    if h == True:
+        if y1 >= 180:
+            y1 -= 1
+        else:
+            h = False
+    if rf == False:
+        if x2 <= 360:
+            x2 += 1
+        else:
+            rf = True
+    if rf == True:
+        if x2 >= 180:
+            x2 -= 1
+        else:
+            rf = False
+    if h == True:
+        if y2 <= 180:
+            y2 += 1
+        else:
+            h = False
+    if h == False:
+        if y2 >= 0:
+            y2 -= 1
+        else:
+            h = True
+    if rf == True:
+        if x3 <= 180:
+            x3 += 1
+        else:
+            rf = False
+    if rf == False:
+        if x3 >= 0:
+            x3 -= 1
+        else:
+            rf = True
+    if h == False:
+        if y3 <= 360:
+            y3 += 1
+        else:
+            h = True
+    if h == True:
+        if y3 >= 180:
+            y3 -= 1
+        else:
+            h = False
+    # отображение квадрата
+    screen.blit(square, [x, y])
+    screen.blit(square1, [x1, y1])
+    screen.blit(square2, [x2, y2])
+    screen.blit(square3, [x3, y3])
+
+    # отображение окна
+    window.blit(screen, [0, 0])
+    pygame.display.flip()
+    pygame.time.delay(5)
+
+pygame.quit()
