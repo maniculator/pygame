@@ -1,0 +1,7 @@
+import time
+x = time.time()
+for i in range(1000):
+    for j in range(1000):
+        a = 0
+y = time.time()
+print(y - x)
