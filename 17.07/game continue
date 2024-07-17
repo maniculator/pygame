@@ -1,0 +1,250 @@
+# coding: utf8
+import pygame
+import random
+
+# задааем размер окна, создаем окно размера size
+size = [400, 460]
+window = pygame.display.set_mode(size)
+# задаем имя - в кавычках, т.к. текст - это строка
+pygame.display.set_caption('My second file')
+
+screen = pygame.Surface(size)
+
+
+
+class Sprite:
+    def __init__(self, xpos, ypos, filename):
+        self.x = xpos
+        self.y = ypos
+        self.bitmap = pygame.image.load(filename)
+
+    def render(self):
+        screen.blit(self.bitmap, (self.x, self.y))
+
+def load_menu():
+    items = [(100, 150, 'старт', ([12, 184, 252]), ([76, 12, 252]), номер 0),
+             ((100, 150, 'выход', ([252, 12, 96]), ([255, 0, 42]), номер 1))]
+
+    pygame.key.set_repeat(0, 0)
+    pygame.mouse.set_visible(True)
+
+    done = False
+    item = 0
+    while not done:
+        # Заливка всех поверхностей
+        screen.fill([255, 255, 255])
+        score.fill([229, 229, 229])
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+                if item == 0:
+                    done = True
+                elif item == 1:
+                    pygame.quit()
+                    sys.exit()
+
+        pointer = pygame.mouse.get_pos()
+        for i in items:
+            if pointer[0] > i[0] and pointer[0] < i[0] + 155 and pointer[1] > i[1] and pointer[1] < i[1] + 50:
+                item = i[5]
+
+        for i in items:
+            if item == i[5]:
+                screen.blit(myFont.render(i[2], 1, i[4]), [i[0], i[1] - 40])
+            else:
+                screen.blit(myFont.render(i[2], 1, i[3]), [i[0], i[1] - 40])
+
+        window.blit(score, [0, 0])
+        window.blit(screen, [0, 40])
+        pygame.display.flip()
+
+
+def you_win():
+    done = False
+    pygame.font.init()
+    gf = pygame.font.Font(None, 50)
+    while not done:
+        # Заливка всех поверхностей
+        screen.fill([255, 255, 255])
+        score.fill([229, 229, 229])
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        # отображаем все окна и поверхности
+        # добавляем текст
+        score.blit(text, [10, 10])
+        window.blit(screen, [0, 60])
+        window.blit(score, [0, 0])
+        pygame.display.flip()
+        pygame.time.delay(50)
+        score = pygame.Surface([400, 60])
+        text = gf.render('Счет:', 1, [0, 0, 0])
+        pygame.display.flip()
+
+
+def loser():
+    done = False
+    while not done:
+        # Заливка всех поверхностей
+        screen.fill([255, 255, 255])
+        score.fill([229, 229, 229])
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        # отображаем все окна и поверхности
+        # добавляем текст
+        score.blit(text, [10, 10])
+        window.blit(screen, [0, 60])
+        window.blit(score, [0, 0])
+        pygame.display.flip()
+        pygame.time.delay(50)
+        score = pygame.Surface([400, 60])
+        text = gf.render('Счет:', 1, [0, 0, 0])
+
+        pygame.display.flip()
+
+def Intersect(s1_x, s2_x, s1_y, s2_y):
+    if ((s1_x > s2_x - 50) and (s1_x < s2_x + 50) and (s1_y > s2_y - 50) and (s1_y < s2_y + 50)):
+        return 1
+    else:
+        return 0
+count = 0
+csh = 0
+step = 5
+f = 0
+# создание персонажей
+# герой
+hero = Sprite(random.randint(0, 360), random.randint(250, 360), 'yellow.png')
+
+# переменные-"переключатели" движения для героя
+hero.right = True
+hero.up = True
+# враг
+enemy = Sprite(200, 10, 'brown.png')
+# переменные-"переключатели" движения для врага
+enemy.right = True
+enemy.up = False
+heart = Sprite(360, 360, 'heart.png')
+heart1 = Sprite(320, 360, 'heart.png')
+heart2 = Sprite(280, 360, 'heart.png')
+shot = Sprite(450, 450, 'shot.png')
+shot1 = Sprite(0, 370, 'shot.png')
+shot2 = Sprite(15, 370, 'shot.png')
+shot3 = Sprite(30, 370, 'shot.png')
+shot.up = True
+pygame.key.set_repeat(1, 1)
+running = True
+pygame.font.init()
+gf =pygame.font.Font(None, 50)
+score = pygame.Surface([400, 60])
+while running:
+    # обработка событий
+    for e in pygame.event.get():
+        if e.type == pygame.QUIT:
+            running = False
+        if e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_LEFT:
+                if hero.x >= 0:
+                    hero.x -= 1
+            if e.key == pygame.K_RIGHT:
+                if hero.x <= 360:
+                    hero.x += 1
+            if e.key == pygame.K_UP:
+                if hero.y >=250:
+                    hero.y -= 1
+            if e.key == pygame.K_DOWN:
+                if hero.y <= 360:
+                    hero.y += 1
+            if e.key == pygame.K_SPACE:
+                if shot.y >= -50:
+                    shot.y = hero.y
+                    shot.x = hero.x
+                    shot.up = False
+                    if f == 0:
+                        csh += 1
+                        f = 1
+                    print(csh)
+
+    # задайте фоновый цвет
+    screen.fill([255, 255, 255])
+    score.fill([229, 229, 229])
+
+    # движение персонажей - аналогично тому,
+    # что делали с квадратом, но теперь по вертикали
+    if enemy.right == True:
+        if enemy.x <= 360:
+            enemy.x += step
+        else:
+            enemy.right = False
+    if enemy.right == False:
+        if enemy.x >= 0:
+            enemy.x -= step
+        else:
+            enemy.right = True
+    if shot.up == False:
+        if shot.y >= -50:
+            shot.y -= 20
+        else:
+            shot.up = True
+    if shot.up == True:
+        shot.x = 450
+        shot.y = 450
+        f = 0
+
+    # enemy.x = random.randint(0, 400)
+    # enemy.y = random.randint(0, 400)
+
+    # столкновение персонажей
+    if Intersect(shot.x, enemy.x, shot.y, enemy.y):
+        shot.up = False
+        enemy.up = True
+        enemy.x = random.randint(0, 360)
+        count += 1
+        step += 3
+        csh -=1
+    if count == 1:
+        heart.x += 50
+        heart.y += 50
+    if count == 2:
+        heart1.x += 50
+        heart1.y += 50
+    if count == 3:
+        heart2.x += 50
+        heart2.y += 50
+        pygame.quit()
+    if csh == 1:
+        shot1.x += 100
+        shot1.y += 100
+    if csh == 2:
+        shot2.x += 100
+        shot2.y += 100
+    if csh == 3:
+        shot3.x += 100
+        shot3.y += 100
+
+    # отображение персонажей
+    hero.render()
+    enemy.render()
+    heart.render()
+    heart1.render()
+    heart2.render()
+    shot.render()
+    shot1.render()
+    shot2.render()
+    shot3.render()
+    text = gf.render('Счет:', 1, [0, 0, 0])
+
+    # отображение окна
+    score.blit(text, [10, 10])
+    window.blit(screen, [0, 60])
+    window.blit(score, [0, 0])
+    pygame.display.flip()
+    pygame.time.delay(50)
+
+pygame.quit()
